@@ -25,6 +25,11 @@ function hasil = silhouette_length_3(folder,cohort_name,file_name,animal,x_mm_pi
 % x_mm_pixel = 0.738007380073801;
 % y_mm_pixel = 0.72463768115942;
 %
+% This code is related to the publication Timotius et.al, 
+% "Silhouette-length-scaled gait parameters for motor functional analysis 
+% in mice and rats", eNeuro, 2019.
+%
+% Ivanna K. Timotius (2019)
 
 % Structuring element:
 if animal == 'rats',
@@ -36,7 +41,6 @@ xy_mm2_pixel = x_mm_pixel*y_mm_pixel;
 se = strel('diamond',se_size);
 
 %Read files:
-%[folder,cohort_name,'\Video_',file_name,'.avi']
 MiceObj = VideoReader([folder,cohort_name,'\Video_',file_name,'.avi']);
 background = imread([folder,cohort_name,'\background_',file_name,'.png']);
 [batas(1),batas(2)] = start_stop_2([folder,cohort_name,'\',file_name,'.xlsx']);

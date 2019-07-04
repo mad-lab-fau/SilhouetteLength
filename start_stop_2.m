@@ -2,6 +2,14 @@ function [data_start,data_stop] = start_stop_2(file_run)
 % [data_start,data_stop] = start_stop_2(file_run)
 % Please enter the CatWalk run file
 %
+% This code is used to determined the first and last frame where the
+% calculation begin
+%
+% This code is related to the publication Timotius et.al, 
+% "Silhouette-length-scaled gait parameters for motor functional analysis 
+% in mice and rats", eNeuro, 2019.
+%
+% Ivanna K. Timotius (2019)
 
 data_run = xlsread(file_run);
 x_RF = data_run(:,3);
