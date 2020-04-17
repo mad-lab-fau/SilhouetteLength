@@ -1,5 +1,5 @@
-function hasil = silhouette_length_3(folder,cohort_name,file_name,animal,x_mm_pixel,y_mm_pixel)
-% [panjang_mm_max,area_max,area_w_tail_max] = silhouette_length_3(folder,cohort_name,file_name,animal,x_mm_pixel,y_mm_pixel)
+function result = silhouette_length_3(folder,cohort_name,file_name,animal,x_mm_pixel,y_mm_pixel)
+% [length_mm_max,area_max,area_w_tail_max] = silhouette_length_3(folder,cohort_name,file_name,animal,x_mm_pixel,y_mm_pixel)
 %
 % This function calculates silhouette length based on the CatWalk data.
 % The 'folder' and 'cohort_name' refer to the folder name, where the CatWalk
@@ -65,16 +65,16 @@ while hasFrame(MiceObj)
             i_blob_w_tail = bwareafilt(imfill(i_blob_black,'holes'),1);
         % Silhouette_length calculation:
         [f(:,2),f(:,1)] = find(i_blob_big);
-        [ujung1,u1] = max(f(:,1)); 
-        [ujung2,u2] = min(f(:,1));
-        tu1 = [ujung1 f(u1,2)];
-        tu2 = [ujung2 f(u2,2)];
-        panjang_max_min(k) = sqrt(sum(((tu1 - tu2 - [se_size 0]).*[x_mm_pixel y_mm_pixel]).^2));
+        [endpoint1,u1] = max(f(:,1)); 
+        [endpoint2,u2] = min(f(:,1));
+        tu1 = [endpoint1 f(u1,2)];
+        tu2 = [endpoint2 f(u2,2)];
+        length_max_min(k) = sqrt(sum(((tu1 - tu2 - [se_size 0]).*[x_mm_pixel y_mm_pixel]).^2));
         % Silhouette_area calculation:
         area(k) = sum(sum(i_blob_big))*xy_mm2_pixel;
         area_w_tail(k) = sum(sum(bwareafilt(i_blob_w_tail,1)))*xy_mm2_pixel;  
     else
-        panjang_max_min(k) = NaN;
+        length_max_min(k) = NaN;
         area(k) = NaN;
         area_w_tail(k) = NaN;
     end        
@@ -84,5 +84,5 @@ while hasFrame(MiceObj)
 end
 [area_max,frame_area]=max(area);
 [area_w_tail_max,frame_area_w_tail]=max(area_w_tail);
-[panjang_mm_max,frame_panjang_mm]=max(panjang_max_min);
-hasil = [panjang_mm_max,area_max,area_w_tail_max];
+[length_mm_max,frame_length_mm]=max(length_max_min);
+result = [length_mm_max,area_max,area_w_tail_max];

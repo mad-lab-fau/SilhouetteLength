@@ -19,16 +19,16 @@ clc
 % reading files:
 folder = pwd;                               % The folder position of files
 file_list = [folder,'\mice_run_statistics_sample.xlsx'];
-file_hasil = [folder,'\mice_results.xlsx'];
+file_result = [folder,'\mice_results.xlsx'];
 
 [n1,n2] = xlsread(file_list,1,'A2:J4');     % Please adjust with the number of data
 weight = n1(:,1);
-umur = n1(:,2);
+ages = n1(:,2);
 animal = n2(:,5);
 runs = n2(:,10);
 group = n2(:,2);
 
-kel_umur = [20 32 47];      % Use this if the folders are arrange according to age point
+kel_ages = [20 32 47];      % Use this if the folders are arrange according to age point
 
 xy_unit(:,1:2) = xlsread(file_list,1,'S2:T4');     % X-Unit and Y-Unit. Please adjust with the number of data
 
@@ -42,36 +42,36 @@ gait_spd(:,3) = 0.5*(xlsread(file_list,1,'DG2:DG4')+xlsread(file_list,1,'HS2:HS4
 gait = [gait_pjg,gait_spd];
 
 for i = 1:3, % number of runs
-    if umur(i) == 20 && strcmp(group(i),'tg_wt'), folder1 = '\Data_Mice\20w\tg_wt';
-    elseif umur(i) == 20 && strcmp(group(i),'wt_wt'), folder1 = '\Data_Mice\20w\wt_wt';    
-    elseif umur(i) == 32 && strcmp(group(i),'tg_wt'), folder1 = '\Data_Mice\32w\tg_wt';
-    elseif umur(i) == 32 && strcmp(group(i),'wt_wt'), folder1 = '\Data_Mice\32w\wt_wt';    
-    elseif umur(i) == 47 && strcmp(group(i),'tg_wt'), folder1 = '\Data_Mice\47w\tg_wt';
-    elseif umur(i) == 47 && strcmp(group(i),'wt_wt'), folder1 = '\Data_Mice\47w\wt_wt';
+    if ages(i) == 20 && strcmp(group(i),'tg_wt'), folder1 = '\Data_Mice\20w\tg_wt';
+    elseif ages(i) == 20 && strcmp(group(i),'wt_wt'), folder1 = '\Data_Mice\20w\wt_wt';    
+    elseif ages(i) == 32 && strcmp(group(i),'tg_wt'), folder1 = '\Data_Mice\32w\tg_wt';
+    elseif ages(i) == 32 && strcmp(group(i),'wt_wt'), folder1 = '\Data_Mice\32w\wt_wt';    
+    elseif ages(i) == 47 && strcmp(group(i),'tg_wt'), folder1 = '\Data_Mice\47w\tg_wt';
+    elseif ages(i) == 47 && strcmp(group(i),'wt_wt'), folder1 = '\Data_Mice\47w\wt_wt';
     end      
     file_name = [char(animal(i)),'_',char(runs(i))];
-    hasil = silhouette_length_3(folder,folder1,file_name,'mice',xy_unit(i,1),xy_unit(i,2));
-    sil_length(i,:) = hasil(1);
-    sil_area_notail(i,:) = hasil(2);
-    sil_area_tail(i,:) = hasil(3);
+    result = silhouette_length_3(folder,folder1,file_name,'mice',xy_unit(i,1),xy_unit(i,2));
+    sil_length(i,:) = result(1);
+    sil_area_notail(i,:) = result(2);
+    sil_area_tail(i,:) = result(3);
 end
 % Length-Scaling:
 gait_s = gait./repmat(sil_length(:,1),[1 5]);
 
 % Save the scaled gait parameters:
 for d=1:2,
-    xlswrite(file_hasil,{'Group','Animal','Age','Run','Weight'},d,'A1')
-    xlswrite(file_hasil,group,d,'A2')
-    xlswrite(file_hasil,animal,d,'B2')
-    xlswrite(file_hasil,umur,d,'C2')
-    xlswrite(file_hasil,runs,d,'D2')
-    xlswrite(file_hasil,weight,d,'E2')
+    xlswrite(file_result,{'Group','Animal','Age','Run','Weight'},d,'A1')
+    xlswrite(file_result,group,d,'A2')
+    xlswrite(file_result,animal,d,'B2')
+    xlswrite(file_result,ages,d,'C2')
+    xlswrite(file_result,runs,d,'D2')
+    xlswrite(file_result,weight,d,'E2')
 end
-xlswrite(file_hasil,{'Silhouette.Length (mm)','Front.Stride.Length','Hind.Stride.Length',...
+xlswrite(file_result,{'Silhouette.Length (mm)','Front.Stride.Length','Hind.Stride.Length',...
     'Body.Speed','Front.Swing.Speed','Hind.Swing.Speed'},1,'F1')
-xlswrite(file_hasil,sil_length,1,'F2')
-xlswrite(file_hasil,gait,1,'G2')
-xlswrite(file_hasil,{'Silhouette.Length (mm)','Scaled.Front.Stride.Length','Scaled.Hind.Stride.Length',...
+xlswrite(file_result,sil_length,1,'F2')
+xlswrite(file_result,gait,1,'G2')
+xlswrite(file_result,{'Silhouette.Length (mm)','Scaled.Front.Stride.Length','Scaled.Hind.Stride.Length',...
     'Scaled.Body.Speed','Scaled.Front.Swing.Speed','Scaled.Hind.Swing.Speed'},2,'F1')
-xlswrite(file_hasil,sil_length,2,'F2')
-xlswrite(file_hasil,gait_s,2,'G2')
+xlswrite(file_result,sil_length,2,'F2')
+xlswrite(file_result,gait_s,2,'G2')
